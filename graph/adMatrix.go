@@ -33,11 +33,11 @@ func (am *AdMatrix) PutPath(startingV int, endingV int, value int) error {
 		return fmt.Errorf("ending vertice out of bounds gotten: %d", endingV)
 	}
 
-	if value < 0 {
-		return fmt.Errorf("value must be positive gotten: %d", value)
+	if value < -1 {
+		return fmt.Errorf("value must be bigger than -1 gotten: %d", value)
 	}
 
-	if am.matrix[startingV][endingV] < 1 {
+	if am.matrix[startingV][endingV] > -1 {
 		am.paths++
 	}
 	am.matrix[startingV][endingV] = value
