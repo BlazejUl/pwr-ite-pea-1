@@ -1,6 +1,10 @@
 package atsp
 
-import "github.com/BlazejUl/pwr-ite-pea-1/graph"
+import (
+	"fmt"
+
+	"github.com/BlazejUl/pwr-ite-pea-1/graph"
+)
 
 // pomocnicza struktur zawierająca graf
 type BruteForce struct {
@@ -24,6 +28,8 @@ func (bf *BruteForce) SolveAll() (int, []int) {
 
 	for i := 0; i < bf.graph.GetVerticesNum(); i++ {
 		cost, path := bf.Solve(i)
+		fmt.Printf("/////////////Test koszt: %d ścieżka: %d", cost, path)
+		fmt.Printf("/////////////Test Bestkoszt: %d Bestścieżka: %d", bestCost, bestPath)
 		if cost < bestCost {
 			bestCost = cost
 			copy(bestPath, path)
