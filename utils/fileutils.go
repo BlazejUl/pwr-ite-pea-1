@@ -10,7 +10,7 @@ import (
 	"github.com/BlazejUl/pwr-ite-pea-1/graph"
 )
 
-func readGraphFromFile(filePath string) (graph.Graph, error) {
+func ReadGraphFromFile(filePath string) (graph.Graph, error) {
 	f, err := os.Open(filePath)
 
 	if err != nil {
