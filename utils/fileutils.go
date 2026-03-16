@@ -85,24 +85,12 @@ func WriteFile(filePath string, info string) error {
 	if err != nil {
 		return err
 	}
-	return nil
-}
 
-func WriteToFile(filePath string, info string) error {
-	f, err := os.Open(filePath)
+	err = rdr.Flush()
 
 	if err != nil {
 		return err
 	}
 
-	defer f.Close()
-
-	rdr := bufio.NewWriter(f)
-
-	_, err = rdr.WriteString(info)
-
-	if err != nil {
-		return err
-	}
 	return nil
 }
