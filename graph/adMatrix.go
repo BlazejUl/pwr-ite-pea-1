@@ -25,11 +25,11 @@ func NewAdMatrix(vertices int) (*AdMatrix, error) {
 
 func (am *AdMatrix) PutPath(startingV int, endingV int, value int) error {
 
-	if startingV <= 0 || startingV >= am.vertices {
+	if startingV < 0 || startingV >= am.vertices {
 		return fmt.Errorf("starting vertice out of bounds gotten: %d", startingV)
 	}
 
-	if endingV <= 0 || endingV >= am.vertices {
+	if endingV < 0 || endingV >= am.vertices {
 		return fmt.Errorf("ending vertice out of bounds gotten: %d", endingV)
 	}
 
