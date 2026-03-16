@@ -1,8 +1,6 @@
 package atsp
 
 import (
-	"fmt"
-
 	"github.com/BlazejUl/pwr-ite-pea-1/graph"
 )
 
@@ -19,23 +17,6 @@ func (bf *BruteForce) GetGraph() graph.Graph {
 // funkcja tworząca nowy BruteForce
 func NewBruteforce(g graph.Graph) *BruteForce {
 	return &BruteForce{graph: g}
-}
-
-// funkcja rozwiązująca problem atsp
-func (bf *BruteForce) SolveAll() (int, []int) {
-	bestCost := 2147483644
-	bestPath := make([]int, bf.graph.GetVerticesNum())
-
-	for i := 0; i < bf.graph.GetVerticesNum(); i++ {
-		cost, path := bf.Solve(i)
-		fmt.Printf("/////////////Test koszt: %d ścieżka: %d", cost, path)
-		fmt.Printf("/////////////Test Bestkoszt: %d Bestścieżka: %d", bestCost, bestPath)
-		if cost < bestCost {
-			bestCost = cost
-			copy(bestPath, path)
-		}
-	}
-	return bestCost, bestPath
 }
 
 // funkcja rozwiązująca problem atsp dla danego miasta startowego
