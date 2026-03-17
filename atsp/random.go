@@ -18,7 +18,7 @@ func NewRandom(G graph.Graph) *Random {
 	return &Random{graph: G}
 }
 
-// Funkcja sprawdzająca wylosowane rozwiązania i zapisująca najlepszy
+// Funkcja sprawdzająca wylosowane rozwiązania i zapisująca najlepszy na podstawie kosztu
 func (ra *Random) Solve() (int, []int) {
 	path := make([]int, 0, ra.graph.GetVerticesNum())
 	bestPath := make([]int, ra.graph.GetVerticesNum())
@@ -36,7 +36,7 @@ func (ra *Random) Solve() (int, []int) {
 	return bestCost, bestPath
 }
 
-// Funkcja losowo wyznaczająca drogę
+// Funkcja losowo wyznaczająca drogę oddaje też koszt tej drogi
 func (ra *Random) getRandom() (int, []int) {
 	path := make([]int, 0, ra.graph.GetVerticesNum())
 	visited := make([]bool, ra.graph.GetVerticesNum())
