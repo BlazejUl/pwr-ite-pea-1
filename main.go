@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/BlazejUl/pwr-ite-pea-1/atsp"
@@ -14,7 +15,11 @@ func main() {
 	OutName := "out\\"
 	fileName := ""
 	inputV := 0
-	k := 1
+	b := 1
+	n := 1
+	r := 1
+	rnd := 1
+	rap := 1
 	for {
 		PrintMenu()
 		var opt int
@@ -30,7 +35,7 @@ func main() {
 			}
 			switch opt {
 			case 1:
-				fmt.Println("Podaj nazwę pliku .txt z macieżą (musi znajdować się w folderze in)")
+				fmt.Println("Podaj nazwę pliku .txt z macieżą (musi znajdować się w folderze in i nie może mieć spacji w nazwie oraz macież musi się kończyć znakiem nowej linii)")
 				if _, err := fmt.Scanln(&fileName); err != nil {
 					fmt.Println(err)
 				} else {
@@ -61,34 +66,124 @@ func main() {
 				fmt.Println("graf nie został podany")
 				break
 			}
-
-			bf := atsp.NewBruteforce(G)
-			start := time.Now()
-			cost, path := bf.Solve(0)
-			lTimeInMikro := time.Since(start).Microseconds()
-			name := fmt.Sprintf("%dBruteForce", k)
-			k++
-			info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d", lTimeInMikro, cost, path)
-			if err := utils.WriteFile(OutName+name, info); err != nil {
-				fmt.Printf("////////error %d", err)
+			PrintMenu2()
+			if _, err := fmt.Scanln(&opt); err != nil {
+				fmt.Println(err)
 			}
-			lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
-			if err := utils.WriteFile(OutName+"LastMatrix.txt", lw+G.ToString()); err != nil {
-				fmt.Printf("////////error %d", err)
-			}
+			switch opt {
+			case 1:
+				bf := atsp.NewBruteforce(G)
+				start := time.Now()
+				cost, path := bf.Solve(0)
+				lTimeInMikro := time.Since(start).Microseconds()
+				name := fmt.Sprintf("%dBruteForce", b)
+				b++
+				info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
+				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
+				graphStr := lw + G.ToString() + "\n"
+				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
 
-			fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
+				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
+			case 2:
+				nn := atsp.NewNN(G)
+				cost, path := nn.Solve(0)
+				name := fmt.Sprintf("%dNearestNeighbour", n)
+				n++
+				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
+				graphStr := lw + G.ToString() + "\n"
+				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+			case 3:
+				rnn := atsp.NewRepetitiveNN(G)
+				cost, path := rnn.Solve(0)
+				name := fmt.Sprintf("%dRepetitiveNN", r)
+				r++
+				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
+				graphStr := lw + G.ToString() + "\n"
+				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+			case 4:
+				ra := atsp.NewRandom(G)
+				cost, path := ra.Solve(0)
+				name := fmt.Sprintf("%dRandom", rnd)
+				rnd++
+				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
+				graphStr := lw + G.ToString() + "\n"
+				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+			default:
+				fmt.Println("tylko numery od 1 - 4")
+			}
 
 		case 3:
-
+			fmt.Println("Podaj ilość miast")
+			if _, err := fmt.Scanln(&opt); err != nil {
+				fmt.Println(err)
+			} else {
+				raport := "   NN   |  ReNN  | Random \n"
+				bAllCost := 0
+				nAllCost := 0
+				rnAllCost := 0
+				rAllCost := 0
+				for range 100 {
+					G, _ = utils.GenerateAdMatrix(opt)
+					bt := atsp.NewBruteforce(G)
+					nn := atsp.NewNN(G)
+					rnn := atsp.NewRepetitiveNN(G)
+					ra := atsp.NewRandom(G)
+					bCost, _ := bt.Solve(0)
+					nCost, _ := nn.Solve(0)
+					rnCost, _ := rnn.Solve(0)
+					rCost, _ := ra.Solve(0)
+					bAllCost = bAllCost + bCost
+					nAllCost = nAllCost + nCost
+					rnAllCost = rnAllCost + rnCost
+					rAllCost = rAllCost + rCost
+					nB := (math.Abs(float64((bCost - nCost))) / float64(bCost)) * 100
+					rnB := (math.Abs(float64((bCost - rnCost))) / float64(bCost)) * 100
+					rB := (math.Abs(float64((bCost - rCost))) / float64(bCost)) * 100
+					iterS := fmt.Sprintf("%.2f%% | %.2f%% | %.2f%%\n", nB, rnB, rB)
+					raport = raport + iterS
+				}
+				nBk := (math.Abs(float64((bAllCost - nAllCost))) / float64(bAllCost)) * 100
+				rnBk := (math.Abs(float64((bAllCost - rnAllCost))) / float64(bAllCost)) * 100
+				rBk := (math.Abs(float64((bAllCost - rAllCost))) / float64(bAllCost)) * 100
+				lIterS := fmt.Sprintf("%.2f%% | %.2f%% | %.2f%%\n", nBk, rnBk, rBk)
+				raport = raport + "--------------------\n"
+				raport = raport + lIterS
+				name := fmt.Sprintf("%dTestAll", rap)
+				if err := utils.WriteFile(OutName+name, raport); err != nil {
+					fmt.Printf("////////error %d", err)
+				}
+				rap++
+			}
 		case 4:
-
-		case 5:
-
-		case 6:
 			return
 		default:
-			fmt.Println("tylko numery od 1 - 7")
+			fmt.Println("tylko numery od 1 - 4")
 		}
 	}
 
@@ -97,9 +192,14 @@ func main() {
 func PrintMenu() {
 	fmt.Println("program do testowania rozwiązań problemu atsp")
 	fmt.Println("1 - załaduj macież")
-	fmt.Println("2 - rozwiąż za pomocą bruteforce")
-	fmt.Println("3 - rozwiąż za pomocą")
-	fmt.Println("4 - rozwiąż za pomocą")
-	fmt.Println("5 - rozwiąż za pomocą")
-	fmt.Println("6 - Wyjdź")
+	fmt.Println("2 - rozwiąż macież")
+	fmt.Println("3 - testuj trafność rozwiązań")
+	fmt.Println("4 - Wyjdź")
+}
+
+func PrintMenu2() {
+	fmt.Println("1 - rozwiąż za pomocą bruteforce")
+	fmt.Println("2 - rozwiąż za pomocą nearest neighbour")
+	fmt.Println("3 - rozwiąż za pomocą repetitive nearest neighbour")
+	fmt.Println("4 - rozwiąż za pomocą random")
 }

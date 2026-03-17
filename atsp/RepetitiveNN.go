@@ -14,6 +14,7 @@ func NewRepetitiveNN(G graph.Graph) *RepetitiveNN {
 	return &RepetitiveNN{graph: G}
 }
 
+// Funkcja przygotowująca zmienne i zapisująca rozwiązanie z RNN
 func (rnn *RepetitiveNN) Solve(startVertex int) (int, []int) {
 	visited := make([]bool, rnn.graph.GetVerticesNum())
 	path := make([]int, 0, rnn.graph.GetVerticesNum())
@@ -28,6 +29,7 @@ func (rnn *RepetitiveNN) Solve(startVertex int) (int, []int) {
 	return bestCost, bestPath
 }
 
+// funkcja RNN która bada rekurencyjnie ścieżki ale tylko te które mają najmniejszy koszt
 func (rnn *RepetitiveNN) RNNRec(startVertex int, visited []bool, currentVertex int, currentCost int, bestCost int, bestPath []int, path []int) (int, []int) {
 	// jeżeli skończy wraca do wierzchołka startowego czyli dodaje koszt przebycia drogi do początku
 	if len(path) == rnn.graph.GetVerticesNum() {
@@ -42,7 +44,7 @@ func (rnn *RepetitiveNN) RNNRec(startVertex int, visited []bool, currentVertex i
 		return bestCost, bestPath
 	}
 
-	// Szuka najpierw najmniejszej nie odwiedzonej ścieżki od obecnego wierzchołka
+	// Szuka najpierw najtańszej nie odwiedzonej ścieżki od obecnego wierzchołka
 	bestPathValue := 2147483644
 	for i := 0; i < rnn.graph.GetVerticesNum(); i++ {
 		if cost, _ := rnn.graph.GetPath(currentVertex, i); !visited[i] && bestPathValue > cost {
