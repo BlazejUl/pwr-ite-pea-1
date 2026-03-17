@@ -1,6 +1,8 @@
 package atsp
 
 import (
+	"fmt"
+
 	"github.com/BlazejUl/pwr-ite-pea-1/graph"
 )
 
@@ -32,6 +34,7 @@ func (nn *NN) Solve(startVertex int) (int, []int) {
 		lCost := 2147483644
 		lVert := 0
 		for j := 0; j < nn.graph.GetVerticesNum(); j++ {
+			fmt.Printf("debug lCost %d lVert %d \n", lCost, lVert)
 			if !visited[j] {
 				if currentCost, _ := nn.graph.GetPath(currentVertex, j); lCost > currentCost {
 					lCost = currentCost
