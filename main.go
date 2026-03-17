@@ -76,7 +76,7 @@ func main() {
 				start := time.Now()
 				cost, path := bf.Solve(0)
 				lTimeInMikro := time.Since(start).Microseconds()
-				name := fmt.Sprintf("%dBruteForce", b)
+				name := fmt.Sprintf("%dBruteForce.txt", b)
 				b++
 				info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
@@ -92,7 +92,7 @@ func main() {
 			case 2:
 				nn := atsp.NewNN(G)
 				cost, path := nn.Solve(0)
-				name := fmt.Sprintf("%dNearestNeighbour", n)
+				name := fmt.Sprintf("%dNearestNeighbour.txt", n)
 				n++
 				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
@@ -107,7 +107,7 @@ func main() {
 			case 3:
 				rnn := atsp.NewRepetitiveNN(G)
 				cost, path := rnn.Solve(0)
-				name := fmt.Sprintf("%dRepetitiveNN", r)
+				name := fmt.Sprintf("%dRepetitiveNN.txt", r)
 				r++
 				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
@@ -122,7 +122,7 @@ func main() {
 			case 4:
 				ra := atsp.NewRandom(G)
 				cost, path := ra.Solve(0)
-				name := fmt.Sprintf("%dRandom", rnd)
+				name := fmt.Sprintf("%dRandom.txt", rnd)
 				rnd++
 				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
@@ -174,7 +174,7 @@ func main() {
 				lIterS := fmt.Sprintf("%.2f%% | %.2f%% | %.2f%%\n", nBk, rnBk, rBk)
 				raport = raport + "--------------------\n"
 				raport = raport + lIterS
-				name := fmt.Sprintf("%dTestAll", rap)
+				name := fmt.Sprintf("%dTestAll.txt", rap)
 				if err := utils.WriteFile(OutName+name, raport); err != nil {
 					fmt.Printf("////////error %d", err)
 				}
