@@ -28,7 +28,7 @@ func (nn *NN) Solve(startVertex int) (int, []int) {
 	visited[startVertex] = true
 	path = append(path, startVertex)
 
-	for i := 0; i < nn.graph.GetVerticesNum(); i++ {
+	for i := 0; i < nn.graph.GetVerticesNum()-1; i++ {
 		lCost := 2147483644
 		lVert := 0
 		for j := 0; j < nn.graph.GetVerticesNum(); j++ {
