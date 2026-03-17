@@ -1,6 +1,7 @@
 package atsp
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/BlazejUl/pwr-ite-pea-1/graph"
@@ -43,14 +44,20 @@ func (ra *Random) getRandom() (int, []int) {
 	visited[0] = true
 	cost := 0
 	currentVertex := 0
-
+	k := 0
 	for i := 0; i < ra.graph.GetVerticesNum(); i++ {
+		fmt.Println("holy")
 		r := rand.Intn(ra.graph.GetVerticesNum())
 		// jeżeli dane misto zostało już odwiedzone to przechodzi po kolei aż natrafi na poprawne
 		if visited[r] {
 			for {
 				r = (r + 1) % ra.graph.GetVerticesNum()
+				fmt.Println(r)
 				if !visited[r] {
+					break
+				}
+				k++
+				if k > 50 {
 					break
 				}
 			}
