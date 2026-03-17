@@ -42,10 +42,11 @@ func (ra *Random) getRandom() (int, []int) {
 	path := make([]int, 0, ra.graph.GetVerticesNum())
 	visited := make([]bool, ra.graph.GetVerticesNum())
 	visited[0] = true
+	path = append(path, 0)
 	cost := 0
 	currentVertex := 0
 	k := 0
-	for i := 0; i < ra.graph.GetVerticesNum(); i++ {
+	for i := 0; i < ra.graph.GetVerticesNum()-1; i++ {
 		fmt.Println("holy")
 		r := rand.Intn(ra.graph.GetVerticesNum())
 		// jeżeli dane misto zostało już odwiedzone to przechodzi po kolei aż natrafi na poprawne
