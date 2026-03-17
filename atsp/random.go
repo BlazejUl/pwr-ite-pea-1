@@ -19,13 +19,13 @@ func NewRandom(G graph.Graph) *Random {
 }
 
 // Funkcja sprawdzająca wylosowane rozwiązania i zapisująca najlepszy na podstawie kosztu
-func (ra *Random) Solve(startVertex int) (int, []int) {
+func (ra *Random) Solve(times int, startVertex int) (int, []int) {
 	path := make([]int, 0, ra.graph.GetVerticesNum())
 	bestPath := make([]int, ra.graph.GetVerticesNum())
 	bestCost := 2147483644
 	cost := 0
 
-	for range 10 * ra.graph.GetVerticesNum() {
+	for range times * ra.graph.GetVerticesNum() {
 		cost, path = ra.getRandom(startVertex)
 		if bestCost > cost {
 			bestCost = cost

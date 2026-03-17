@@ -124,9 +124,13 @@ func main() {
 				}
 				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 			case 4:
+				fmt.Println("Podaj mnożnik ilości permutacji x * liczbaMiast")
+				if _, err := fmt.Scanln(&opt); err != nil {
+					fmt.Println(err)
+				}
 				ra := atsp.NewRandom(G)
 				start := time.Now()
-				cost, path := ra.Solve(0)
+				cost, path := ra.Solve(opt, 0)
 				lTimeInMikro := time.Since(start).Microseconds()
 				name := fmt.Sprintf("%dRandom.txt", rnd)
 				rnd++
@@ -163,7 +167,7 @@ func main() {
 					bCost, _ := bt.Solve(0)
 					nCost, _ := nn.Solve(0)
 					rnCost, _ := rnn.Solve(0)
-					rCost, _ := ra.Solve(0)
+					rCost, _ := ra.Solve(10, 0)
 					bAllCost = bAllCost + bCost
 					nAllCost = nAllCost + nCost
 					rnAllCost = rnAllCost + rnCost
