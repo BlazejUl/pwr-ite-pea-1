@@ -91,10 +91,12 @@ func main() {
 				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 			case 2:
 				nn := atsp.NewNN(G)
+				start := time.Now()
 				cost, path := nn.Solve(0)
+				lTimeInMikro := time.Since(start).Microseconds()
 				name := fmt.Sprintf("%dNearestNeighbour.txt", n)
 				n++
-				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
 				graphStr := lw + G.ToString() + "\n"
 				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
@@ -103,13 +105,15 @@ func main() {
 				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
 					fmt.Printf("////////error %d", err)
 				}
-				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 			case 3:
 				rnn := atsp.NewRepetitiveNN(G)
+				start := time.Now()
 				cost, path := rnn.Solve(0)
+				lTimeInMikro := time.Since(start).Microseconds()
 				name := fmt.Sprintf("%dRepetitiveNN.txt", r)
 				r++
-				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
 				graphStr := lw + G.ToString() + "\n"
 				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
@@ -118,13 +122,15 @@ func main() {
 				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
 					fmt.Printf("////////error %d", err)
 				}
-				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 			case 4:
 				ra := atsp.NewRandom(G)
+				start := time.Now()
 				cost, path := ra.Solve(0)
+				lTimeInMikro := time.Since(start).Microseconds()
 				name := fmt.Sprintf("%dRandom.txt", rnd)
 				rnd++
-				info := fmt.Sprintf("koszt: %d\nścieżka: %d\n", cost, path)
+				info := fmt.Sprintf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 				lw := fmt.Sprintf("%d\n", G.GetVerticesNum())
 				graphStr := lw + G.ToString() + "\n"
 				if err := utils.WriteFile(OutName+name, info+graphStr); err != nil {
@@ -133,7 +139,7 @@ func main() {
 				if err := utils.WriteFile(OutName+"LastMatrix.txt", graphStr); err != nil {
 					fmt.Printf("////////error %d", err)
 				}
-				fmt.Printf("koszt: %d\nścieżka: %d\n", cost, path)
+				fmt.Printf("czas: %d µs\nkoszt: %d\nścieżka: %d\n", lTimeInMikro, cost, path)
 			default:
 				fmt.Println("tylko numery od 1 - 4")
 			}
