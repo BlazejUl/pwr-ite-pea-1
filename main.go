@@ -189,6 +189,8 @@ func main() {
 					fmt.Printf("////////error %d", err)
 				}
 				rap++
+				fmt.Println("   NN   |  ReNN  | Random ")
+				fmt.Printf("%.2f%% | %.2f%% | %.2f%%\n", nBk, rnBk, rBk)
 			}
 		case 4:
 			return
