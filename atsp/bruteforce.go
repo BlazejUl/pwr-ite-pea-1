@@ -1,6 +1,8 @@
 package atsp
 
 import (
+	"math"
+
 	"github.com/BlazejUl/pwr-ite-pea-1/graph"
 )
 
@@ -19,51 +21,44 @@ func NewBruteforce(g graph.Graph) *BruteForce {
 	return &BruteForce{graph: g}
 }
 
-// funkcja rozwiązująca problem atsp dla danego miasta startowego
-func (bf *BruteForce) Solve(startVertex int) (int, []int) {
-	visited := make([]bool, bf.graph.GetVerticesNum())
-	path := make([]int, 0, bf.graph.GetVerticesNum())
-	bestPath := make([]int, bf.graph.GetVerticesNum())
-	bestCost := 2147483644
-
-	visited[startVertex] = true
-	path = append(path, startVertex)
-
-	bestCost, bestPath = bf.BFRec(startVertex, visited, startVertex, 0, bestCost, bestPath, path)
-
-	return bestCost, bestPath
-}
-
-// funkcja rekurencyjnie sprawdza wszystkie ścieżki od zadanego wierzchołka startowego
-func (bf *BruteForce) BFRec(startVertex int, visited []bool, currentVertex int, currentCost int, bestCost int, bestPath []int, path []int) (int, []int) {
-	// jeżeli skończy wraca do wierzchołka startowego czyli dodaje koszt przebycia drogi do początku
-	if len(path) == bf.graph.GetVerticesNum() {
-		cost, _ := bf.graph.GetPath(currentVertex, startVertex)
-		currentCost += cost
-
-		if currentCost < bestCost {
-			bestCost = currentCost
-			copy(bestPath, path)
-		}
-
-		return bestCost, bestPath
+// funkcja rozwiązująca problem atsp dla pierwszego miasta
+func (bf *BruteForce) Solve() (int, []int) {
+	n := bf.graph.GetVerticesNum()
+	nodes := make([]int, n-1)
+	for i := 0; i < n-1; i++ {
+		nodes[i] = i + 1
 	}
 
-	// Rekurencyjnie sprawdzi wszystkie ścieżki od wierzchołka startowego
-	for i := 0; i < bf.graph.GetVerticesNum(); i++ {
-		if !visited[i] {
-			visited[i] = true
-			cost, _ := bf.graph.GetPath(currentVertex, i)
-			currentCost += cost
-			path = append(path, i)
+	bestCost := math.MaxInt32
+	var bestPath []int
 
-			bestCost, bestPath = bf.BFRec(startVertex, visited, i, currentCost, bestCost, bestPath, path)
+	var permute func([]int, int)
+	permute = func(a []int, k int) {
+		if k == len(a) {
+			currentCost, _ := bf.graph.GetPath(0, a[0])
+			for i := 0; i < len(a)-1; i++ {
+				c, _ := bf.graph.GetPath(a[i], a[i+1])
+				currentCost += c
+			}
+			co, _ := bf.graph.GetPath(a[len(a)-1], 0)
+			currentCost += co
 
-			visited[i] = false
-			currentCost -= cost
-			path = path[:len(path)-1]
+			if currentCost < bestCost {
+				bestCost = currentCost
+				bestPath = make([]int, len(a)+2)
+				bestPath[0] = 0
+				copy(bestPath[1:], a)
+				bestPath[len(bestPath)-1] = 0
+			}
+			return
+		}
+		for i := k; i < len(a); i++ {
+			a[k], a[i] = a[i], a[k]
+			permute(a, k+1)
+			a[k], a[i] = a[i], a[k]
 		}
 	}
 
+	permute(nodes, 0)
 	return bestCost, bestPath
 }
